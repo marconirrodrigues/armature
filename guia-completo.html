@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agent Engineering Framework — Complete Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #faf9f7;
+  --bg-warm: #f5f2ed;
+  --bg-code: #1c1e26;
+  --surface: #fff;
+  --border: #e4dfd8;
+  --border-light: #ece8e1;
+  --text: #2c2825;
+  --text-body: #4a4540;
+  --text-muted: #8a837a;
+  --accent: #c45d35;
+  --accent-hover: #a84e2d;
+  --accent-dim: rgba(196,93,53,0.08);
+  --accent-dim2: rgba(196,93,53,0.15);
+  --tier1: #2d7d6f;
+  --tier1-bg: rgba(45,125,111,0.07);
+  --tier2: #c45d35;
+  --tier2-bg: rgba(196,93,53,0.07);
+  --tier3: #6b5ce7;
+  --tier3-bg: rgba(107,92,231,0.07);
+  --green: #2d7d6f;
+  --yellow: #b8860b;
+  --red: #c44035;
+  --serif: 'Playfair Display', Georgia, serif;
+  --sans: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.06);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.08);
+  --radius: 10px;
+  --radius-lg: 16px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text-body);
+  font-family: var(--sans);
+  font-size: 17px;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection { background: var(--accent-dim2); color: var(--text); }
+
+/* ── LAYOUT ── */
+.container { max-width: 820px; margin: 0 auto; padding: 0 2rem; }
+.wide { max-width: 1060px; }
+
+section { padding: 5rem 0; }
+
+/* ── TYPOGRAPHY ── */
+h1, h2, h3 { font-family: var(--serif); color: var(--text); }
+
+h1 { font-size: clamp(2.4rem, 5vw, 3.6rem); line-height: 1.12; letter-spacing: -0.02em; }
+h2 { font-size: clamp(1.7rem, 3vw, 2.2rem); line-height: 1.2; margin-bottom: 1rem; }
+h3 { font-size: 1.25rem; line-height: 1.35; margin: 2.5rem 0 0.75rem; }
+h4 { font-family: var(--sans); font-weight: 600; font-size: 0.95rem; color: var(--text); margin: 2rem 0 0.5rem; letter-spacing: 0.01em; }
+
+p { margin-bottom: 1rem; }
+strong { color: var(--text); font-weight: 600; }
+em { font-style: italic; }
+a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.2s; }
+a:hover { border-bottom-color: var(--accent); }
+code { font-family: var(--mono); font-size: 0.85em; background: var(--bg-warm); padding: 0.15em 0.4em; border-radius: 4px; color: var(--accent); }
+
+/* ── HERO ── */
+.hero {
+  padding: 6rem 2rem 5rem;
+  text-align: center;
+  background: linear-gradient(180deg, var(--bg-warm) 0%, var(--bg) 100%);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.hero-eyebrow {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 1.5rem;
+}
+
+.hero h1 { max-width: 700px; margin: 0 auto 1.5rem; }
+.hero h1 .italic { font-style: italic; color: var(--accent); }
+.hero-sub { max-width: 560px; margin: 0 auto; color: var(--text-muted); font-size: 1.05rem; }
+
+.hero-stack {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  margin-top: 3rem;
+  max-width: 540px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hero-tier {
+  flex: 1;
+  padding: 1rem 0.75rem;
+  text-align: center;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  border: 1px solid var(--border);
+}
+
+.hero-tier:first-child { border-radius: var(--radius) 0 0 var(--radius); }
+.hero-tier:last-child { border-radius: 0 var(--radius) var(--radius) 0; }
+.hero-tier:not(:first-child) { border-left: none; }
+
+.ht1 { background: var(--tier1-bg); color: var(--tier1); border-color: rgba(45,125,111,0.2); }
+.ht2 { background: var(--tier2-bg); color: var(--tier2); border-color: rgba(196,93,53,0.2); }
+.ht3 { background: var(--tier3-bg); color: var(--tier3); border-color: rgba(107,92,231,0.2); }
+
+.hero-tier span { display: block; font-family: var(--mono); font-size: 0.65rem; opacity: 0.7; margin-top: 0.2rem; font-weight: 400; }
+
+/* ── NAV/TOC ── */
+.toc-bar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(250,249,247,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-light);
+  padding: 0;
+  overflow-x: auto;
+}
+
+.toc-bar nav {
+  max-width: 1060px;
+  margin: 0 auto;
+  display: flex;
+  gap: 0;
+  padding: 0 1rem;
+}
+
+.toc-bar a {
+  padding: 0.85rem 1rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.toc-bar a:hover { color: var(--text); border-bottom-color: var(--border); }
+
+/* ── SECTION LABEL ── */
+.section-num {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+/* ── DIVIDER ── */
+.divider {
+  border: none;
+  height: 1px;
+  background: var(--border-light);
+  margin: 0;
+}
+
+/* ── BLOCKQUOTE ── */
+blockquote {
+  border-left: 3px solid var(--accent);
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0;
+  background: var(--surface);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  box-shadow: var(--shadow-sm);
+}
+
+blockquote p { margin: 0; font-style: italic; color: var(--text-body); }
+blockquote cite { display: block; margin-top: 0.6rem; font-style: normal; font-size: 0.8rem; color: var(--accent); }
+
+/* ── CARDS ── */
+.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.25rem; margin: 1.5rem 0; }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+.card h3 { margin: 0 0 0.5rem; font-size: 1.05rem; }
+.card p { font-size: 0.9rem; color: var(--text-muted); margin: 0; }
+
+/* ── TIER CARD ACCENTS ── */
+.card.t1 { border-top: 3px solid var(--tier1); }
+.card.t2 { border-top: 3px solid var(--tier2); }
+.card.t3 { border-top: 3px solid var(--tier3); }
+
+/* ── CALLOUT ── */
+.callout {
+  border-radius: var(--radius-lg);
+  padding: 1.5rem 1.75rem;
+  margin: 2rem 0;
+  border: 1px solid;
+}
+
+.callout.insight { background: var(--accent-dim); border-color: rgba(196,93,53,0.2); }
+.callout.tip { background: var(--tier1-bg); border-color: rgba(45,125,111,0.2); }
+.callout.warning { background: rgba(184,134,11,0.06); border-color: rgba(184,134,11,0.2); }
+.callout.philosophy { background: var(--tier3-bg); border-color: rgba(107,92,231,0.15); }
+
+.callout-label {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.callout.insight .callout-label { color: var(--accent); }
+.callout.tip .callout-label { color: var(--tier1); }
+.callout.warning .callout-label { color: var(--yellow); }
+.callout.philosophy .callout-label { color: var(--tier3); }
+.callout p { margin: 0; font-size: 0.92rem; }
+
+/* ── CODE BLOCK ── */
+.code-block {
+  background: var(--bg-code);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  line-height: 1.7;
+  color: #c5c0b8;
+  overflow-x: auto;
+  box-shadow: var(--shadow-md);
+}
+
+.code-block .comment { color: #636870; }
+.code-block .hl { color: var(--accent); font-weight: 500; }
+.code-block .str { color: #6dbf8b; }
+.code-block .kw { color: #a78bfa; }
+.code-block .dim { color: #636870; }
+
+/* ── TABLE ── */
+table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.88rem; }
+th { text-align: left; padding: 0.75rem 1rem; background: var(--bg-warm); font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); border-bottom: 2px solid var(--border); }
+td { padding: 0.75rem 1rem; border-bottom: 1px solid var(--border-light); vertical-align: top; }
+tr:hover td { background: var(--bg-warm); }
+
+/* ── LAYERS STACK ── */
+.stack { display: flex; flex-direction: column; gap: 0; margin: 2rem 0; }
+
+.stack-layer {
+  padding: 1.25rem 1.5rem;
+  border: 1px solid var(--border-light);
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  background: var(--surface);
+}
+
+.stack-layer:first-child { border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
+.stack-layer:last-child { border-radius: 0 0 var(--radius-lg) var(--radius-lg); }
+.stack-layer:not(:first-child) { border-top: none; }
+
+.stack-badge {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 0.3rem 0.65rem;
+  border-radius: 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+}
+
+.stack-badge.b1 { background: var(--tier1-bg); color: var(--tier1); }
+.stack-badge.b2 { background: var(--tier2-bg); color: var(--tier2); }
+.stack-badge.b3 { background: var(--tier3-bg); color: var(--tier3); }
+
+.stack-content strong { color: var(--text); display: block; font-size: 0.95rem; margin-bottom: 0.15rem; }
+.stack-content span { font-size: 0.85rem; color: var(--text-muted); }
+
+/* ── CHECKLIST ── */
+.checklist { list-style: none; margin: 1.5rem 0; padding: 0; }
+.checklist li { padding: 0.6rem 0 0.6rem 2rem; position: relative; border-bottom: 1px solid var(--border-light); font-size: 0.9rem; }
+.checklist li::before { content: '□'; position: absolute; left: 0; font-family: var(--mono); font-size: 1rem; color: var(--text-muted); top: 0.55rem; }
+
+/* ── FLOW DIAGRAM ── */
+.flow {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  margin: 2rem 0;
+  flex-wrap: wrap;
+}
+
+.flow-step {
+  flex: 1;
+  min-width: 140px;
+  padding: 1rem;
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--border-light);
+  position: relative;
+}
+
+.flow-step:first-child { border-radius: var(--radius) 0 0 var(--radius); }
+.flow-step:last-child { border-radius: 0 var(--radius) var(--radius) 0; }
+.flow-step:not(:first-child) { border-left: none; }
+
+.flow-step .flow-num { font-family: var(--mono); font-size: 0.65rem; color: var(--accent); margin-bottom: 0.25rem; }
+.flow-step .flow-title { font-weight: 600; font-size: 0.85rem; color: var(--text); }
+.flow-step .flow-desc { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.2rem; }
+.flow-step .flow-arrow { position: absolute; right: -8px; top: 50%; transform: translateY(-50%); color: var(--border); font-size: 1rem; z-index: 1; }
+
+/* ── FILE TREE ── */
+.file-tree {
+  background: var(--bg-code);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  line-height: 2;
+  color: #c5c0b8;
+  margin: 1.5rem 0;
+  box-shadow: var(--shadow-md);
+}
+
+.file-tree .folder { color: #6dbf8b; }
+.file-tree .file { color: #c5c0b8; }
+.file-tree .desc { color: #636870; font-size: 0.72rem; }
+.file-tree .t1 { color: #5bb8a6; }
+.file-tree .t2 { color: #e07850; }
+.file-tree .t3 { color: #9b8df0; }
+
+/* ── FOOTER ── */
+footer {
+  padding: 3rem 2rem;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border-light);
+  background: var(--bg-warm);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .hero { padding: 4rem 1.5rem 3rem; }
+  .container { padding: 0 1.5rem; }
+  section { padding: 3.5rem 0; }
+  .card-grid { grid-template-columns: 1fr; }
+  .flow { flex-direction: column; }
+  .flow-step { border-radius: 0 !important; border-left: 1px solid var(--border-light) !important; }
+  .flow-step:first-child { border-radius: var(--radius) var(--radius) 0 0 !important; }
+  .flow-step:last-child { border-radius: 0 0 var(--radius) var(--radius) !important; }
+  .flow-step:not(:first-child) { border-top: none; }
+  .flow-step .flow-arrow { display: none; }
+  .hero-stack { flex-direction: column; }
+  .hero-tier { border-radius: 0 !important; border-left: 1px solid; }
+  .hero-tier:first-child { border-radius: var(--radius) var(--radius) 0 0 !important; }
+  .hero-tier:last-child { border-radius: 0 0 var(--radius) var(--radius) !important; }
+  .hero-tier:not(:first-child) { border-top: none; }
+  .toc-bar { display: none; }
+  .stack-layer { flex-direction: column; gap: 0.5rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- HERO -->
+<!-- ═══════════════════════════════════════════════ -->
+<header class="hero" id="top">
+  <div class="container">
+    <div class="hero-eyebrow">Agent Engineering Framework — v2.0</div>
+    <h1>The Complete Guide to Development with <span class="italic">AI Agents</span></h1>
+    <p class="hero-sub">A progressive 3-tier, 4-mode framework that unifies Spec-Driven Development, Harness Engineering, and Orchestration Engineering into a coherent system — provider-, model-, and IDE-agnostic.</p>
+    <div class="hero-stack">
+      <div class="hero-tier ht1">Spec-Driven <span>Tier 1 — Intent</span></div>
+      <div class="hero-tier ht2">Harness <span>Tier 2 — Environment</span></div>
+      <div class="hero-tier ht3">Orchestration <span>Tier 3 — Scale</span></div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- STICKY NAV -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="toc-bar">
+  <nav>
+    <a href="#porque">Why</a>
+    <a href="#modelo">The Model</a>
+    <a href="#tier1">Tier 1: Spec</a>
+    <a href="#tier2">Tier 2: Harness</a>
+    <a href="#tier3">Tier 3: Orchestration</a>
+    <a href="#arquivos">Files</a>
+    <a href="#implementacao">Implementation</a>
+    <a href="#checklists">Checklists</a>
+    <a href="#anti-patterns">Anti-Patterns</a>
+    <a href="#referencias">References</a>
+  </nav>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- 1. WHY THIS FRAMEWORK EXISTS -->
+<!-- ═══════════════════════════════════════════════ -->
+<section id="porque">
+<div class="container">
+  <span class="section-num">01 — Context</span>
+  <h2>Why this framework exists</h2>
+
+  <p>Between 2025 and 2026, software engineering underwent an accelerated transformation. AI agents moved beyond glorified autocomplete to become autonomous code producers. But a painful discovery accompanied this advance: <strong>building the agent is the easy part — making it work reliably is where the real problem lives.</strong></p>
+
+  <p>Three disciplines emerged to solve different facets of this problem:</p>
+
+  <div class="card-grid">
+    <div class="card t1">
+      <h3>Spec-Driven Development</h3>
+      <p>Specifications as the source of truth. The spec defines <em>what</em> to build and <em>why</em>, replacing vague prompts with clear contracts between human and agent.</p>
+    </div>
+    <div class="card t2">
+      <h3>Harness Engineering</h3>
+      <p>The environment surrounding the agent. Constraints, feedback loops, linters, tests — everything that makes an agent operate consistently. Every error becomes a permanent improvement to the system.</p>
+    </div>
+    <div class="card t3">
+      <h3>Orchestration Engineering</h3>
+      <p>Coordinating multiple specialized agents. Work decomposition, task routing, inter-agent communication — the evolution from pair programmer to team manager.</p>
+    </div>
+  </div>
+
+  <p>The problem is that these disciplines evolved in parallel, with different vocabularies, tools, and communities. No one integrated all three into a coherent system.</p>
+
+  <div class="callout philosophy">
+    <div class="callout-label">Central thesis</div>
+    <p>The three disciplines are not alternatives — they are <strong>complementary layers of the same stack</strong>. The spec defines the "what". The harness defines "how the agent operates". Orchestration defines "who does what". Using one without the others leaves critical gaps.</p>
+  </div>
+
+  <h3>The timeline</h3>
+  <table>
+    <tr><th>Period</th><th>Paradigm</th><th>Central question</th></tr>
+    <tr><td>2023-2024</td><td>Prompt Engineering</td><td>"What to ask?"</td></tr>
+    <tr><td>Mid 2025</td><td>Context Engineering</td><td>"What to send along?"</td></tr>
+    <tr><td>Sep 2025</td><td>Spec-Driven Development</td><td>"What to build, formally?"</td></tr>
+    <tr><td>Feb 2026</td><td>Harness Engineering</td><td>"How does the whole system operate?"</td></tr>
+    <tr><td>Mar 2026+</td><td>Orchestration Engineering</td><td>"Who does what, in parallel?"</td></tr>
+  </table>
+
+  <p>This framework integrates the three most recent layers into a progressive approach: you start simple and add complexity only when the project demands it.</p>
+</div>
+</section>
+
+<hr class="divider">
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- 2. THE MENTAL MODEL -->
+<!-- ═══════════════════════════════════════════════ -->
+<section id="modelo">
+<div class="container">
+  <span class="section-num">02 — The Model</span>
+  <h2>The Progressive 3-Tier Stack</h2>
+
+  <p>The framework is organized into 3 tiers that activate as needed. <strong>Each tier includes the previous ones.</strong> It is not necessary to use all three from the start — begin with Tier 1 and evolve when you feel the need.</p>
+
+  <div class="stack">
+    <div class="stack-layer">
+      <span class="stack-badge b3">TIER 3</span>
+      <div class="stack-content">
+        <strong>Orchestration — Scale &amp; Parallelism</strong>
+        <span>Multiple specialized agents, task routing, inter-agent communication, cost optimization. For when a single agent is not enough.</span>
+      </div>
+    </div>
+    <div class="stack-layer">
+      <span class="stack-badge b2">TIER 2</span>
+      <div class="stack-content">
+        <strong>Harness — Environment &amp; Reliability</strong>
+        <span>Architectural constraints, feedback loops, golden principles, garbage collection, observability. For when the agent needs to operate consistently in production.</span>
+      </div>
+    </div>
+    <div class="stack-layer">
+      <span class="stack-badge b1">TIER 1</span>
+      <div class="stack-content">
+        <strong>Spec-Driven — Intent &amp; Planning</strong>
+        <span>Specification, technical plan, decomposed tasks, validation criteria. For any project, from the very first commit.</span>
+      </div>
+    </div>
+  </div>
+
+  <h3>When to activate each tier</h3>
+
+  <table>
+    <tr><th>Scenario</th><th>Tier</th><th>Why</th></tr>
+    <tr><td>Prototype / side project</td><td style="color:var(--tier1)">Tier 1</td><td>Basic spec keeps the agent on track without overhead</td></tr>
+    <tr><td>Feature in an existing codebase</td><td style="color:var(--tier1)">Tier 1</td><td>Spec forces clarity about how the feature interacts with the system</td></tr>
+    <tr><td>Ongoing production project</td><td style="color:var(--tier2)">Tier 1+2</td><td>Harness prevents drift, accumulates learning, maintains quality</td></tr>
+    <tr><td>Legacy modernization</td><td style="color:var(--tier2)">Tier 1+2</td><td>Spec captures lost logic, harness enforces new patterns</td></tr>
+    <tr><td>System migration (stack, database, cloud, architecture)</td><td style="color:var(--tier2)">Tier 1+2</td><td>MIGRATE mode: maps legacy, defines strategy, ensures rollback and parity</td></tr>
+    <tr><td>Team with multiple agents</td><td style="color:var(--tier3)">Tier 1+2+3</td><td>Orchestration decomposes and distributes work among agents</td></tr>
+    <tr><td>Product at scale (e.g.: 1M+ lines)</td><td style="color:var(--tier3)">Tier 1+2+3</td><td>Without orchestration + harness, high throughput = high drift</td></tr>
+  </table>
+
+  <div class="callout tip">
+    <div class="callout-label">Practical rule</div>
+    <p>If you are unsure which tier to use, start with <strong>Tier 1</strong>. When you feel the agent is "slipping" (ignoring conventions, repeating errors, losing context), it is time for <strong>Tier 2</strong>. When a single agent becomes a bottleneck, it is time for <strong>Tier 3</strong>.</p>
+  </div>
+</div>
+</section>
+
+<hr class="divider">
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- 3. TIER 1 — SPEC-DRIVEN -->
+<!-- ═══════════════════════════════════════════════ -->
+<section id="tier1">
+<div class="container">
+  <span class="section-num">03 — Tier 1</span>
+  <h2>Spec-Driven Development</h2>
+
+  <blockquote>
+    <p>"The spec is documentation that both humans and agents can consult to stay on course. Write good documentation first — the model may be able to build the entire implementation from it."</p>
+    <cite>— Addy Osmani, "How to write a good spec for AI agents"</cite>
+  </blockquote>
+
+  <h3>The philosophy</h3>
+  <p>Instead of code as the source of truth (with specs as disposable accessories), <strong>the specification becomes the primary artifact</strong>. Code is output generated from specs. Maintaining software means evolving specifications.</p>
+
+  <p>The central insight: LLMs are excellent at completing patterns, but poor at reading minds. A detailed spec is simply very good context.</p>
+
+  <h3>The 4-phase workflow</h3>
+
+  <div class="flow">
+    <div class="flow-step">
+      <div class="flow-num">01</div>
+      <div class="flow-title">Specify</div>
+      <div class="flow-desc">What, for whom, why</div>
+      <span class="flow-arrow">→</span>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">02</div>
+      <div class="flow-title">Plan</div>
+      <div class="flow-desc">How, with which stack</div>
+      <span class="flow-arrow">→</span>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">03</div>
+      <div class="flow-title">Tasks</div>
+      <div class="flow-desc">Ordered tasks</div>
+      <span class="flow-arrow">→</span>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">04</div>
+      <div class="flow-title">Implement</div>
+      <div class="flow-desc">Execution + validation</div>
+    </div>
+  </div>
+
+  <p><strong>Critical rule:</strong> Do not advance to the next phase without human validation of the current phase. Each phase has a review checkpoint.</p>
+
+  <h4>Phase 1: Specify — What to build</h4>
+  <p>High-level description focused on <em>what</em> and <em>why</em>, not <em>how</em>. User journeys, acceptance criteria, edge cases. The agent can help generate and refine — but the human reviews and approves.</p>
+
+  <h4>Phase 2: Plan — How to build</h4>
+  <p>Technical constraints: stack, patterns, architecture, dependencies. The agent generates an implementation plan based on the spec. It can generate multiple variations for comparison.</p>
+
+  <h4>Phase 3: Tasks — Decompose into units</h4>
+  <p>Break the plan into concrete, testable work items. Each task with clear inputs, expected outputs, and validation criteria. Sequenced by dependency. Small enough to implement and test in isolation.</p>
+
+  <h4>Phase 4: Implement — Execute with verification</h4>
+  <p>The agent executes task by task using spec + plan as context. Atomic commits per task. Validation against criteria defined in the spec.</p>
+
+  <h3>The 5 principles for good specs</h3>
+
+  <div class="card-grid">
+    <div class="card">
+      <h3>1. Start high, detail later</h3>
+      <p>Write a brief and let the agent expand it into a detailed spec. Do not over-engineer upfront.</p>
+    </div>
+    <div class="card">
+      <h3>2. Structure like a PRD</h3>
+      <p>Clear sections: objective, users, requirements, stack, boundaries. The agent finds information better when it is organized.</p>
+    </div>
+    <div class="card">
+      <h3>3. Modularize the context</h3>
+      <p>Do not dump everything at once. One task at a time. Stacking 10 rules makes the agent follow maybe 3.</p>
+    </div>
+    <div class="card">
+      <h3>4. Include boundaries</h3>
+      <p>What NOT to do is as important as what to do. ✅ Always / ⚠️ Ask first / 🚫 Never.</p>
+    </div>
+    <div class="card">
+      <h3>5. Test and evolve</h3>
+      <p>The spec is a living document, versioned in Git. Incorporate test criteria and update when decisions change.</p>
+    </div>
+  </div>
+
+  <div class="callout warning">
+    <div class="callout-label">Warning</div>
+    <p><strong>"Curse of Instructions":</strong> research shows that agents skip the middle of long files, and auto-generated specs worsened results in 5 of 8 tested scenarios (ETH Zurich). Keep specs concise and human-reviewed.</p>
+  </div>
+</div>
+</section>
+
+<hr class="divider">
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- 4. TIER 2 — HARNESS -->
+<!-- ═══════════════════════════════════════════════ -->
+<section id="tier2">
+<div class="container">
+  <span class="section-num">04 — Tier 2</span>
+  <h2>Harness Engineering</h2>
+
+  <blockquote>
+    <p>"Every time the agent makes a mistake, don't wait for it to improve on its own. Engineer the environment so that specific error becomes structurally impossible to repeat."</p>
+    <cite>— Mitchell Hashimoto, co-founder of HashiCorp</cite>
+  </blockquote>
+
+  <h3>The philosophy</h3>
+  <p>The harness is everything around the agent except the model itself: <strong>Agent = Model + Harness</strong>. While the spec defines what to build, the harness defines how the agent operates while building it. The metaphor: the model is the horse (fast, powerful, undirected). The harness is the bridle (reins, brake, saddle).</p>
+
+  <p>The empirical proof: LangChain went from 52.8% to 66.5% on Terminal Bench 2.0 by changing only the harness, without swapping the model. The model is a commodity — the harness is the moat.</p>
+
+  <h3>The 6 components of a harness</h3>
+
+  <table>
+    <tr><th>#</th><th>Component</th><th>What it is</th><th>Examples</th></tr>
+    <tr><td>1</td><td><strong>Context Engineering</strong></td><td>The right information at the right time</td><td>AGENTS.md as TOC, structured docs/, progressive disclosure</td></tr>
+    <tr><td>2</td><td><strong>Architectural Constraints</strong></td><td>Limits the agent cannot exceed</td><td>Dependency layers, module boundaries, custom linters</td></tr>
+    <tr><td>3</td><td><strong>Verification Loops</strong></td><td>Automated output checking</td><td>Tests, type checking, CI, agent-to-agent review</td></tr>
+    <tr><td>4</td><td><strong>State Management</strong></td><td>Memory across sessions</td><td>progress.md, git commits as checkpoints, context bridging</td></tr>
+    <tr><td>5</td><td><strong>Tool Orchestration</strong></td><td>Tools the agent can use</td><td>MCP servers, Chrome DevTools, observability (logs, traces)</td></tr>
+    <tr><td>6</td><td><strong>Lifecycle &amp; HITL</strong></td><td>Lifecycle control</td><td>Permission model, approval hooks, retry logic, cleanup agents</td></tr>
+  </table>
+
+  <h3>Essential Harness patterns</h3>
+
+  <h4>AGENTS.md as Table of Contents</h4>
+  <p>The OpenAI team started with a giant AGENTS.md — and it failed. The file competed with the code for the model's attention. The solution: ~100 lines working as an index, pointing to a structured <code>docs/</code> directory. Progressive disclosure: show what is needed at the current level, link to depth when relevant.</p>
+
+  <h4>Golden Principles</h4>
+  <p>Opinionated, mechanical rules that keep the codebase readable for future agent runs. Encoded in the repo, not in conversations. Enforced mechanically by linters and structural tests — not by "advice" in the prompt.</p>
+
+  <h4>Garbage Collection</h4>
+  <p>Cleanup agents running on a schedule (daily/weekly): violation scanners, dependency auditors, pattern enforcers. Each deviation becomes a refactoring PR. The OpenAI team spent 20% of their time cleaning up "AI slop" — automating it solved the problem.</p>
+
+  <h4>Verification beats advice</h4>
+  <p>If a class of error is recurring, stop describing it in AGENTS.md and start preventing it mechanically. Convert repeated review comments into deterministic checks.</p>
+
+  <div class="callout insight">
+    <div class="callout-label">Mental model: Guides &amp; Sensors (Böckeler/Fowler)</div>
+    <p><strong>Guides</strong> (feedforward): everything that tells the agent what to do <em>before</em> acting — AGENTS.md, rules, skills, specs. Proactively prevent errors.<br>
+    <strong>Sensors</strong> (feedback): everything that verifies the output <em>after</em> — linters, tests, reviews. Reactively detect and correct.<br>
+    Sensors can be <strong>computational</strong> (deterministic) or <strong>inferential</strong> (LLM-based). Use both together.</p>
+  </div>
+</div>
+</section>
+
+<hr class="divider">
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- 5. TIER 3 — ORCHESTRATION -->
+<!-- ═══════════════════════════════════════════════ -->
+<section id="tier3">
+<div class="container">
+  <span class="section-num">05 — Tier 3</span>
+  <h2>Orchestration Engineering</h2>
+
+  <blockquote>
+    <p>"When you orchestrate 50 agents in parallel, vague thinking doesn't just slow you down — it multiplies. A vague spec multiplies errors across the entire fleet. A precise spec multiplies precise implementations everywhere."</p>
+    <cite>— Addy Osmani, "The Code Agent Orchestra"</cite>
+  </blockquote>
+
+  <h3>The philosophy</h3>
+  <p>The evolution of the engineer's role: <strong>Coder → Conductor → Orchestrator</strong>. The conductor guides a single agent in real time (synchronous, sequential). The orchestrator coordinates a fleet of asynchronous agents, each with its own context, scope, and responsibility.</p>
+
+  <p>The mental shift: from pair programming to managing a team. New skills: work decomposition, precise specification, output verification at scale — instead of writing code.</p>
+
+  <h3>The 3 orchestration patterns</h3>
+
+  <div class="card-grid">
+    <div class="card t3">
+      <h3>Subagents</h3>
+      <p>The simplest. A parent agent decomposes work and spawns specialized children (Data, Logic, API). No communication between children. The parent manages dependencies manually. Start here.</p>
+    </div>
+    <div class="card t3">
+      <h3>Agent Teams</h3>
+      <p>The leap. Shared task list with automatic dependency tracking, peer-to-peer messaging, file locking. 3-5 teammates is the sweet spot. Agents self-assign tasks.</p>
+    </div>
+    <div class="card t3">
+      <h3>Hierarchical</h3>
+      <p>Teams of teams. Feature leads that spawn specialists. Mirrors a real engineering org. The main orchestrator only talks to 2-3 leads, keeping context clean.</p>
+    </div>
+  </div>
+
+  <h3>The 3 tiers of orchestration tools</h3>
+  <table>
+    <tr><th>Tier</th><th>Mode</th><th>Tools</th><th>When to use</th></tr>
+    <tr><td>1</td><td>Interactive</td><td>Claude Code CLI, Cursor inline</td><td>Day-to-day work, 1 agent</td></tr>
+    <tr><td>2</td><td>Local parallel</td><td>Claude Squad, Conductor, Cursor BG Agents</td><td>Parallel sprints, 3-10 agents</td></tr>
+    <tr><td>3</td><td>Async cloud</td><td>Claude Code Web, Copilot Agent, Codex Web</td><td>Draining backlog overnight</td></tr>
+  </table>
+
+  <h3>Open challenges</h3>
+  <p><strong>Observability</strong> is the biggest gap — debugging conflicts between agents is still "whack-a-mole". <strong>Cost</strong> scales with N agents — the "Plan-and-Execute" pattern (frontier model orchestrates, cheap model executes) reduces it by up to 90%. And <strong>spec quality becomes exponentially more critical</strong> — ambiguity multiplies across the entire fleet.</p>
+</div>
+</section>
+
+<hr class="divider">
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- 6. FILE STRUCTURE -->
+<!-- ═══════════════════════════════════════════════ -->
+<section id="arquivos">
+<div class="container">
+  <span class="section-num">06 — File Structure</span>
+  <h2>The practical template</h2>
+
+  <p>Each tier adds files to the project. All are Markdown, versionable in Git, readable by any agent.</p>
+
+  <div class="file-tree">
+<span class="folder">📁 project/</span>
+│
+├── <span class="file t1">SPEC.md</span>              <span class="desc">← Tier 1: What to build, for whom, why</span>
+├── <span class="file t1">PLAN.md</span>              <span class="desc">← Tier 1: Stack, architecture, technical decisions</span>
+├── <span class="file t1">TASKS.md</span>             <span class="desc">← Tier 1: Ordered tasks with criteria</span>
+├── <span class="file t1">MIGRATION.md</span>         <span class="desc">← Migrate mode: mapping, strategy, rollback, parity, cutover</span>
+│
+├── <span class="file t2">AGENTS.md</span>            <span class="desc">← Tier 2: Project Table of Contents (~100 lines)</span>
+├── <span class="file t2">LESSONS.md</span>           <span class="desc">← Tier 2: Past errors and how they were resolved</span>
+├── <span class="file t2">PROGRESS.md</span>          <span class="desc">← Tier 2+3: Cross-session progress log</span>
+│
+├── <span class="folder t2">📁 docs/</span>
+│   ├── <span class="file t2">architecture.md</span>  <span class="desc">← Tier 2: Dependency layers, module boundaries</span>
+│   ├── <span class="file t2">golden-principles.md</span> <span class="desc">← Tier 2: Mechanical anti-drift rules</span>
+│   ├── <span class="file t2">boundaries.md</span>    <span class="desc">← Tier 2: ✅ Always / ⚠️ Ask / 🚫 Never</span>
+│   ├── <span class="folder t2">📁 patterns/</span>     <span class="desc">← Tier 2: Correct code examples</span>
+│   │   └── <span class="file dim">example-api-route.md</span>
+│   ├── <span class="file t3">agents-roster.md</span> <span class="desc">← Tier 3: Which agents, roles, scopes</span>
+│   └── <span class="file t3">task-routing.md</span>  <span class="desc">← Tier 3: How to decompose and distribute work</span>
+│
+└── <span class="file">README.md</span>            <span class="desc">← Project overview + quick start</span>
+  </div>
+
+  <div class="callout tip">
+    <div class="callout-label">Template design</div>
+    <p>Each Markdown file contains: (1) a header with purpose and when to use, (2) sections with <code>[DEFINE: ...]</code> placeholders that work as prompts — both for humans to fill in and for agents to use as generative questions, (3) concrete examples between HTML comments, (4) inline instructions explaining the reason for each section.</p>
+  </div>
+</div>
+</section>
+
+<hr class="divider">
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- 7. IMPLEMENTATION GUIDE -->
+<!-- ═══════════════════════════════════════════════ -->
+<section id="implementacao">
+<div class="container">
+  <span class="section-num">07 — Implementation</span>
+  <h2>How to use the framework in practice</h2>
+
+  <h3>Full flow — from zero to deploy</h3>
+
+  <h4>Phase 0: Setup (5 minutes)</h4>
+  <p>Copy the files from the tier you need to the root of your repository. Fill in <code>SPEC.md</code> with a high-level brief — even if it is just 3 paragraphs. That is the minimum to get started.</p>
+
+  <h4>Phase 1: Specify (human + agent)</h4>
+  <p>Open <code>SPEC.md</code> with your agent and ask it to expand the brief into a detailed spec. Review each section. Adjust. Do not advance until you are satisfied with the description of what will be built.</p>
+
+  <h4>Phase 2: Plan (agent → human review)</h4>
+  <p>With the spec approved, ask the agent to generate <code>PLAN.md</code>. It will propose a stack, architecture, and technical decisions. Question the choices. Ask for alternatives if needed.</p>
+
+  <h4>Phase 3: Tasks (agent → human review)</h4>
+  <p>The agent breaks the plan into <code>TASKS.md</code>. Each task with an acceptance criterion. Reorder if necessary. Cut scope if too ambitious.</p>
+
+  <h4>Phase 4: Implement (agent executes, human validates)</h4>
+  <p>The agent works task by task. After each task, validate against the criteria. Atomic commits. If something fails, update <code>LESSONS.md</code> and adjust the harness.</p>
+
+  <h4>Phase 5: Evolve (continuous)</h4>
+  <p>With every error, improve the harness. With every new feature, update the spec. After every session, update <code>PROGRESS.md</code>. The system improves with each use — compounding effect.</p>
+
+  <h3>The 4 operating modes</h3>
+
+<table>
+  <tr><th>Mode</th><th>When to use</th><th>Special artifact</th></tr>
+  <tr><td><strong>Bootstrap</strong></td><td>New project, from scratch</td><td>—</td></tr>
+  <tr><td><strong>Retrofit</strong></td><td>Existing project adopting the framework</td><td>—</td></tr>
+  <tr><td><strong>Evolve</strong></td><td>Project already using the framework that needs to iterate</td><td>—</td></tr>
+  <tr><td><strong>Migrate</strong></td><td>Existing system needs to be migrated (stack, database, cloud, architecture)</td><td><code>MIGRATION.md</code></td></tr>
+</table>
+
+<div class="callout tip">
+  <div class="callout-label">Migrate Mode</div>
+  <p>Migrate mode has specific discovery steps (M1–M4) to map the legacy system, define a strategy (big bang, strangler fig, parallel execution), and guarantee 3 principles: <strong>map before migrating</strong>, <strong>rollback as a prerequisite</strong>, and <strong>parity verified</strong> — never assumed.</p>
+</div>
+
+  <h3>How to evolve between Tiers</h3>
+
+  <table>
+    <tr><th>Signal</th><th>Action</th></tr>
+    <tr><td>Agent ignores conventions or repeats errors</td><td>Activate Tier 2: create <code>AGENTS.md</code> and <code>docs/boundaries.md</code></td></tr>
+    <tr><td>20%+ of time spent correcting agent output</td><td>Activate Tier 2: add <code>docs/golden-principles.md</code> and linters</td></tr>
+    <tr><td>Single agent context window cannot fit the project</td><td>Activate Tier 3: decompose with subagents</td></tr>
+    <tr><td>Parallel tasks accumulate in the backlog</td><td>Activate Tier 3: create <code>docs/agents-roster.md</code> and use Agent Teams</td></tr>
+  </table>
+</div>
+</section>
+
+<hr class="divider">
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- 8. CHECKLISTS -->
+<!-- ═══════════════════════════════════════════════ -->
+<section id="checklists">
+<div class="container">
+  <span class="section-num">08 — Checklists</span>
+  <h2>Checklists by Tier</h2>
+
+  <h3 style="color:var(--tier1)">Tier 1 — Spec-Driven</h3>
+  <ul class="checklist">
+    <li><code>SPEC.md</code> filled in with objective, users, requirements, and success criteria</li>
+    <li><code>PLAN.md</code> with stack, architecture, and justified technical decisions</li>
+    <li><code>TASKS.md</code> with ordered tasks, dependencies, and acceptance criteria</li>
+    <li>Human review between each phase (Specify → Plan → Tasks → Implement)</li>
+    <li>Spec committed to Git alongside the code</li>
+  </ul>
+
+  <h3 style="color:var(--tier2)">Tier 2 — Harness</h3>
+  <ul class="checklist">
+    <li><code>AGENTS.md</code> as table of contents (~100 lines), not an encyclopedia</li>
+    <li><code>docs/architecture.md</code> with dependency layers and module boundaries</li>
+    <li><code>docs/golden-principles.md</code> with mechanical rules (not vague advice)</li>
+    <li><code>docs/boundaries.md</code> with ✅/⚠️/🚫 classification</li>
+    <li>At least 1 example in <code>docs/patterns/</code></li>
+    <li>Linter + type checker + test suite configured and passing</li>
+    <li>Pre-commit hooks running basic checks</li>
+    <li><code>LESSONS.md</code> updated after every significant error</li>
+    <li>Constraints enforced mechanically (not just documented)</li>
+  </ul>
+
+  <h3 style="color:var(--tier3)">Tier 3 — Orchestration</h3>
+  <ul class="checklist">
+    <li><code>docs/agents-roster.md</code> defining agents, roles, and file scopes</li>
+    <li><code>docs/task-routing.md</code> with decomposition criteria</li>
+    <li><code>PROGRESS.md</code> updated after every work session</li>
+    <li>Each agent operates in an isolated worktree or branch</li>
+    <li>Spec precise enough to survive multiplication by N agents</li>
+    <li>Human review at integration points (when agent outputs converge)</li>
+    <li>Cost tracking per agent/task</li>
+  </ul>
+</div>
+</section>
+
+<hr class="divider">
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- 9. ANTI-PATTERNS -->
+<!-- ═══════════════════════════════════════════════ -->
+<section id="anti-patterns">
+<div class="container">
+  <span class="section-num">09 — Anti-Patterns</span>
+  <h2>What to avoid</h2>
+
+  <table>
+    <tr><th>Anti-Pattern</th><th>Why it fails</th><th>What to do instead</th></tr>
+    <tr>
+      <td><strong>AGENTS.md encyclopedia</strong></td>
+      <td>A giant file competes with the code for the model's attention. The agent ignores important constraints.</td>
+      <td>~100 lines as TOC, pointing to a structured docs/ directory.</td>
+    </tr>
+    <tr>
+      <td><strong>Auto-generated spec without review</strong></td>
+      <td>ETH Zurich: auto-generated specs performed worse in 5 of 8 scenarios and cost 20%+ more tokens.</td>
+      <td>Agent generates draft, human reviews and approves before proceeding.</td>
+    </tr>
+    <tr>
+      <td><strong>Advice instead of enforcement</strong></td>
+      <td>"Always run the tests" in AGENTS.md is forgotten on the 47th iteration of a long debug session.</td>
+      <td>A pre-commit hook that blocks the commit if tests fail.</td>
+    </tr>
+    <tr>
+      <td><strong>Weekly manual cleanup</strong></td>
+      <td>OpenAI spent 20% of their time (every Friday) cleaning up "AI slop". Does not scale.</td>
+      <td>Automated cleanup agents running on a schedule.</td>
+    </tr>
+    <tr>
+      <td><strong>Vague spec + multiple agents</strong></td>
+      <td>Ambiguity multiplies by N agents. Each one heads in a different direction.</td>
+      <td>Spec with acceptance criteria, edge cases, and explicit examples before distributing.</td>
+    </tr>
+    <tr>
+      <td><strong>New/trendy framework</strong></td>
+      <td>Agents perform better with "boring" technology — composable, stable, well-documented.</td>
+      <td>Favor technologies with strong representation in model training data.</td>
+    </tr>
+    <tr>
+  <td><strong>Migrating without mapping the legacy</strong></td>
+  <td>Undocumented system = unmapped risk. Production surprises during cutover cause unplanned rollbacks.</td>
+  <td>MIGRATE mode: discovery M1 maps the legacy before any technical decision.</td>
+</tr>
+<tr>
+  <td><strong>Migration without a rollback plan</strong></td>
+  <td>Without a defined reversion, any problem becomes an incident. The pressure to "keep going" grows even when you should stop.</td>
+  <td>Principle §29: rollback is a prerequisite, not optional. Validate before starting.</td>
+</tr>
+    <tr>
+      <td><strong>Everything in the prompt, nothing in the repo</strong></td>
+      <td>If the agent does not see it in the repo, it does not exist. Slack, Google Docs, tribal knowledge are invisible.</td>
+      <td>Encode all knowledge in the repository as versioned artifacts.</td>
+    </tr>
+    <tr>
+      <td><strong>Orchestrating without a harness</strong></td>
+      <td>More agents without constraints = more drift, faster. High throughput + zero guardrails = exponential tech debt.</td>
+      <td>Tier 2 is a prerequisite for Tier 3. Always.</td>
+    </tr>
+  </table>
+</div>
+</section>
+
+<hr class="divider">
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- 10. REFERENCES -->
+<!-- ═══════════════════════════════════════════════ -->
+<section id="referencias">
+<div class="container">
+  <span class="section-num">10 — References</span>
+  <h2>Sources and recommended reading</h2>
+
+  <h3 style="color:var(--tier1)">Spec-Driven Development</h3>
+  <table>
+    <tr><th>Source</th><th>Relevance</th></tr>
+    <tr><td><a href="https://github.com/github/spec-kit">GitHub Spec Kit</a> (84.7k ⭐)</td><td>Open-source reference toolkit</td></tr>
+    <tr><td><a href="https://addyosmani.com/blog/good-spec/">Addy Osmani — "How to write a good spec for AI agents"</a></td><td>5 principles for effective specs</td></tr>
+    <tr><td><a href="https://martinfowler.com/articles/exploring-gen-ai/sdd-3-tools.html">Böckeler/Fowler — "Understanding SDD: Kiro, spec-kit, and Tessl"</a></td><td>Taxonomy: spec-first, spec-anchored, spec-as-source</td></tr>
+    <tr><td><a href="https://www.thoughtworks.com/en-us/insights/blog/agile-engineering-practices/spec-driven-development-unpacking-2025-new-engineering-practices">Thoughtworks — "Spec-driven development: Unpacking..."</a></td><td>Analysis of the emerging practice</td></tr>
+    <tr><td><a href="https://github.com/addyosmani/agent-skills">Addy Osmani — Agent Skills</a> (19 skills)</td><td>Skills with anti-rationalization tables</td></tr>
+  </table>
+
+  <h3 style="color:var(--tier2)">Harness Engineering</h3>
+  <table>
+    <tr><th>Source</th><th>Relevance</th></tr>
+    <tr><td><a href="https://openai.com/index/harness-engineering/">OpenAI — "Harness engineering: leveraging Codex"</a></td><td>Foundational case: 1M lines, zero manual</td></tr>
+    <tr><td><a href="https://mitchellh.com/writing/my-ai-adoption-journey">Mitchell Hashimoto — "My AI Adoption Journey"</a></td><td>Origin of the term "Engineer the Harness"</td></tr>
+    <tr><td><a href="https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html">Böckeler/Fowler — "Harness engineering for coding agents"</a></td><td>Guides &amp; Sensors mental model</td></tr>
+    <tr><td><a href="https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents">Anthropic — "Effective harnesses for long-running agents"</a></td><td>Initializer + coding agent pattern</td></tr>
+    <tr><td><a href="https://www.humanlayer.dev/blog/skill-issue-harness-engineering-for-coding-agents">HumanLayer — "Skill Issue: Harness Engineering"</a></td><td>Sub-agents as context firewalls</td></tr>
+    <tr><td><a href="https://developers.redhat.com/articles/2026/04/07/harness-engineering-structured-workflows-ai-assisted-development">Red Hat — "Harness engineering: Structured workflows"</a></td><td>Repository impact maps</td></tr>
+  </table>
+
+  <h3 style="color:var(--tier3)">Orchestration Engineering</h3>
+  <table>
+    <tr><th>Source</th><th>Relevance</th></tr>
+    <tr><td><a href="https://addyosmani.com/blog/code-agent-orchestra/">Addy Osmani — "The Code Agent Orchestra"</a></td><td>Patterns: subagents, teams, hierarchical</td></tr>
+    <tr><td><a href="https://www.oreilly.com/radar/conductors-to-orchestrators-the-future-of-agentic-coding/">O'Reilly — "Conductors to Orchestrators"</a></td><td>Formal definition conductor vs orchestrator</td></tr>
+    <tr><td><a href="https://www.aviator.co/blog/the-rise-of-coding-agent-orchestrators/">Aviator — "The Rise of Coding Agent Orchestrators"</a></td><td>Practical guide, adoption tiers</td></tr>
+    <tr><td><a href="https://humanwhocodes.com/blog/2026/01/coder-orchestrator-future-software-engineering/">N. Zakas — "From Coder to Orchestrator"</a></td><td>Evolution of the engineer's role</td></tr>
+    <tr><td><a href="https://escape.tech/blog/everything-i-learned-about-harness-engineering-and-ai-factories-in-san-francisco-april-2026/">Escape.tech — "Everything I Learned in SF (April 2026)"</a></td><td>SF field report, AI Factory layers</td></tr>
+    <tr><td><a href="https://www.anthropic.com/engineering/managed-agents">Anthropic — "Scaling Managed Agents"</a></td><td>Brain/hands decoupling, meta-harness</td></tr>
+  </table>
+</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- FOOTER -->
+<!-- ═══════════════════════════════════════════════ -->
+<footer>
+  <p><strong>Agent Engineering Framework</strong> — v2.0 — April 2026</p>
+  <p>Based on research from GitHub, Reddit, Hacker News, technical articles, academic papers, and engineering blogs from OpenAI, Anthropic, Thoughtworks, Google, and the community.</p>
+  <p style="margin-top:0.75rem; color:var(--accent);">The practical Markdown templates accompany this guide as separate files ready to copy into your repository.</p>
+</footer>
+
+</body>
+</html>
