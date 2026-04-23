@@ -1,25 +1,30 @@
 # [Project Name]
 
-## About
+[One-line description of what this project does.]
 
-[2-3 lines from SPEC.md]
+## Requirements
 
-## Quick Start
+- [runtime/language + version]
+- [key dependencies]
+
+## Installation
 
 ```bash
-[commands to install and run]
+[install commands]
 ```
 
-## Structure
+## Usage
 
-| File | Purpose |
-|------|---------|
-| `SPEC.md` | What to build and why |
-| `PLAN.md` | Technical decisions |
-| `TASKS.md` | Decomposed work |
-| `AGENTS.md` | Guide for AI agents |
-| `docs/` | Architecture, principles, boundaries |
+```bash
+[run commands]
+```
 
-## Dev with Agents
+## Development
 
-Start by reading `AGENTS.md`.
+```bash
+[dev server / test / lint commands]
+```
+
+## License
+
+[License]

@@ -732,10 +732,10 @@ footer {
   <span class="section-num">06 — File Structure</span>
   <h2>The practical template</h2>
 
-  <p>Each tier adds files to the project. All are Markdown, versionable in Git, readable by any agent.</p>
+  <p>Two-layer layout by default (<strong>§31 — workspace and project are separate</strong>): the workspace holds meta artifacts (Markdown files readable by any agent); the <code>&lt;project&gt;/</code> subdirectory holds the actual code — clean, with no AI references, and becomes the published repository.</p>
 
   <div class="file-tree">
-<span class="folder">📁 project/</span>
+<span class="folder">📁 workspace/</span>                 <span class="desc">← Agent workspace (meta artifacts)</span>
 │
 ├── <span class="file t1">SPEC.md</span>              <span class="desc">← Tier 1: What to build, for whom, why</span>
 ├── <span class="file t1">PLAN.md</span>              <span class="desc">← Tier 1: Stack, architecture, technical decisions</span>
@@ -755,7 +755,16 @@ footer {
 │   ├── <span class="file t3">agents-roster.md</span> <span class="desc">← Tier 3: Which agents, roles, scopes</span>
 │   └── <span class="file t3">task-routing.md</span>  <span class="desc">← Tier 3: How to decompose and distribute work</span>
 │
-└── <span class="file">README.md</span>            <span class="desc">← Project overview + quick start</span>
+└── <span class="folder">📁 &lt;project-name&gt;/</span>     <span class="desc">← The actual repo (git init here)</span>
+    ├── <span class="file">src/</span> ...           <span class="desc">← Stack-specific code</span>
+    ├── <span class="file">package.json</span>       <span class="desc">← or equivalent</span>
+    ├── <span class="file">README.md</span>          <span class="desc">← Clean — no AI/framework references</span>
+    └── <span class="file">.gitignore</span>
+  </div>
+
+  <div class="callout warning">
+    <div class="callout-label">Why the split</div>
+    <p>Mixing process artifacts and code in the same directory pollutes the final repository with AI-process files and leaks framework references into the project's <code>README.md</code>. The split keeps the published repo clean and lets you drop the workspace (or not publish it) without affecting the project.</p>
   </div>
 
   <div class="callout tip">

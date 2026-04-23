@@ -7,9 +7,9 @@
 ### T-01: Project setup and tooling
 - **Status:** ⬜
 - **Depends on:** —
-- **Description:** Initialize project, install deps, configure RTK + Caveman + MemPalace (CLI + hooks) + linter + hooks. Configure MemPalace hooks in `.claude/settings.json` (SessionStart → wake-up, Stop → auto-save, PreCompact → emergency save). Verify native Auto Memory active.
-- **Acceptance criteria:** Project runs, RTK intercepting (`rtk gain`), Caveman available, `mempalace status` returns initialized palace, MemPalace hooks registered, Auto Memory active
-- **Files:** package.json, .gitignore, AGENTS.md, RTK config, .claude/settings.json
+- **Description:** Create `<project-name>/` subdirectory (§31), scaffold the project inside it, install deps, run `git init` inside `<project-name>/`. Configure RTK + Caveman + MemPalace (CLI + hooks) + linter + hooks. Configure MemPalace hooks in `.claude/settings.json` (SessionStart → wake-up, Stop → auto-save, PreCompact → emergency save). Verify native Auto Memory active. Meta artifacts (SPEC, PLAN, TASKS, AGENTS, docs/) stay in the workspace — never copied into `<project-name>/`.
+- **Acceptance criteria:** `<project-name>/` exists with scaffolded project, `git rev-parse --git-dir` inside it resolves to `<project-name>/.git`, project's `README.md` has no AI/framework references, RTK intercepting (`rtk gain`), Caveman available, `mempalace status` returns initialized palace, MemPalace hooks registered, Auto Memory active
+- **Files:** `<project-name>/package.json`, `<project-name>/.gitignore`, `<project-name>/README.md`, AGENTS.md (workspace), RTK config, .claude/settings.json
 
 ### T-02: [Descriptive name]
 - **Status:** ⬜

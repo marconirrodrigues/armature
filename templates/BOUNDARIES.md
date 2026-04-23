@@ -23,4 +23,7 @@
 - Remove/disable linter rules
 - Modify production config
 - Delete tests to make build pass
+- Add AI/framework/agent references to the project's `README.md` or any end-user-facing doc (§31 — workspace artifacts stay in the workspace)
+- Run `git init` in the workspace — it belongs inside `<project-name>/`
+- Move meta artifacts (SPEC, PLAN, TASKS, AGENTS, LESSONS, PROGRESS, docs/) into `<project-name>/`
 - [project rule]

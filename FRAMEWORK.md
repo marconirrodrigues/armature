@@ -49,6 +49,40 @@
 29. **Rollback is a prerequisite.** No migration starts without a validated rollback plan. Migration without rollback is a gamble, not engineering.
 30. **Parity verified, not assumed.** Every feature from the source system has a verifiable acceptance criterion at the destination. Parity is never inferred.
 
+### Structure
+31. **Workspace and project are separate.** Process artifacts (SPEC, PLAN, TASKS, AGENTS, LESSONS, PROGRESS, docs/) live in the workspace (parent directory). The built project lives in a clean subdirectory with no AI/framework references. The subdirectory is the repository that gets published — `git init` happens inside it, not in the workspace.
+
+---
+
+## STANDARD DIRECTORY LAYOUT
+
+Default layout for every generated project (§31):
+
+```
+<workspace>/                         ← Agent workspace (meta artifacts)
+├── SPEC.md   PLAN.md   TASKS.md
+├── AGENTS.md (or CLAUDE.md)
+├── LESSONS.md   PROGRESS.md
+├── MIGRATION.md                     (MIGRATE mode only)
+├── docs/
+│   ├── architecture.md   golden-principles.md
+│   ├── boundaries.md     patterns/
+│   └── agents-roster.md  task-routing.md  (multi-agent only)
+└── <project-name>/                  ← The actual project repo
+    ├── src/ ...
+    ├── package.json (or equivalent)
+    ├── README.md                    (clean — no AI/framework references)
+    ├── .gitignore
+    └── [stack-specific files]
+```
+
+**Rules:**
+- `git init` runs **inside `<project-name>/`**, never in the workspace.
+- The project's `README.md` is for end users — no mention of AGENTS.md, SPEC.md, framework, or AI assistance.
+- AGENTS.md references (Build & Test commands, file paths) point into `<project-name>/` since that's where the code lives, but AGENTS.md itself stays in the workspace.
+- The workspace may have its own `.git` for tracking meta artifacts, but it is separate from the published project repo.
+- RETROFIT: if the existing repo already mixes artifacts and code, propose migrating to this layout before generating anything new.
+
 ---
 
 ## OPERATION MODE
@@ -57,12 +91,10 @@ Ask: **"Starting from scratch, applying to an existing project, or evolving a pr
 
 | Mode | When | Action |
 |------|------|--------|
-| BOOTSTRAP | New | Full discovery, generates everything |
-| RETROFIT | Existing | Analyzes repo, generates what's missing |
+| BOOTSTRAP | New | Full discovery, generates everything (workspace + `<project-name>/` subdir) |
+| RETROFIT | Existing | Analyzes repo, generates what's missing. If artifacts/code are mixed → propose splitting into workspace + subdir |
 | EVOLVE | Already uses framework | Re-reads artifacts, updates |
 | MIGRATE | Existing system needs to be migrated | Analyzes legacy, defines strategy, generates structure + MIGRATION.md |
-
-If the repo cannot contain artifacts → propose **workspace split**: external `_meta/`.
 
 ### RETROFIT
 1. **Analyze repo** — AGENTS.md, CLAUDE.md, .cursorrules, docs, tests, linter?
@@ -205,16 +237,19 @@ If accepted → document in AGENTS.md, CLAUDE.md, PLAN.md. Actual installation �
 
 ### Inclusion rules
 
-| Condition | Artifacts |
-|-----------|-----------|
-| Always | SPEC.md · PLAN.md · TASKS.md · README.md |
-| Uses AI agent | AGENTS.md |
-| MIGRATE mode | MIGRATION.md |
-| Claude Code | CLAUDE.md (workspace root) |
-| Has constraints | docs/boundaries.md |
-| >1 session | LESSONS.md · PROGRESS.md |
-| Production/existing | docs/architecture.md · docs/golden-principles.md · docs/patterns/ |
-| Multi-agent | docs/agents-roster.md · docs/task-routing.md |
+Column **Location** indicates where the file lives — `workspace` (meta artifact) or `<project>/` (end-user visible, §31).
+
+| Condition | Artifacts | Location |
+|-----------|-----------|----------|
+| Always | SPEC.md · PLAN.md · TASKS.md | workspace |
+| Always | README.md | `<project>/` (clean, no AI refs) |
+| Uses AI agent | AGENTS.md | workspace |
+| MIGRATE mode | MIGRATION.md | workspace |
+| Claude Code | CLAUDE.md | workspace |
+| Has constraints | docs/boundaries.md | workspace |
+| >1 session | LESSONS.md · PROGRESS.md | workspace |
+| Production/existing | docs/architecture.md · docs/golden-principles.md · docs/patterns/ | workspace |
+| Multi-agent | docs/agents-roster.md · docs/task-routing.md | workspace |
 
 ### Research before creating (§19)
 - **patterns/, configs, hooks** → battle-tested GitHub → customize
@@ -233,6 +268,8 @@ Tools accepted in 1.5 → do not duplicate functionality, reference/integrate, d
 
 **Rules:** create complete structure at once; project-specific; keep template sections; concrete stack examples; RETROFIT: only what's missing; EVOLVE: only what changed.
 
+**Directory setup (§31):** generate workspace artifacts at the root and create `<project-name>/` subdirectory for the actual project. Run `git init` inside `<project-name>/`, never in the workspace. The project's `README.md` describes the product — no mention of AGENTS.md, SPEC.md, framework, or AI assistance.
+
 **Enforcement in boundaries.md (§10):**
 ```
 - [Rule] → Enforced by: [tool/hook/linter]
@@ -246,7 +283,7 @@ Tools accepted in 1.5 → do not duplicate functionality, reference/integrate, d
 - Do cross-references match?
 - Do names match across artifacts?
 - Are constraints enforced? Do patterns use the declared stack?
-- Is enforcement indicated? Workspace split without internal refs?
+- Is enforcement indicated? Does the project README stay clean (§31)?
 - Is the stack justified by the project (§21)?
 
 ---

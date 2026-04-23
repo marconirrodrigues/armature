@@ -47,6 +47,7 @@ claude "Read FRAMEWORK.md and start the process for my project"
 - **MIGRATE mode** — 4th operation mode for system migrations (stack, database, cloud, architecture). Specific M1–M4 discovery, dedicated MIGRATION.md template.
 - **MIGRATION.md template** — MIGRATE mode artifact: origin→destination mapping, strategy, rollback, feature parity checklist, cutover plan, success criteria.
 - **Principles §28–§30** — Expanded Constitution with 3 migration principles: map before migrating, rollback as prerequisite, verified parity.
+- **Principle §31 + standard layout** — Workspace (meta artifacts) and project (`<project-name>/` subdirectory) are separate by default. `git init` runs inside the subdirectory; the project's `README.md` has no AI/framework references. The published repo stays clean.
 - **Agnostic P3** — Discovery P3 with generic terms (plugins, automations, integrations) — works with any provider/IDE/model.
 - **Explicit quality criteria** — Phase 1.5 "Proactive research" with 5 objective criteria.
 - **Improved SPEC.md** — New Assumptions and Open Questions sections.
