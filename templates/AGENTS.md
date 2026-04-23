@@ -17,9 +17,9 @@
 
 ## Conventions
 
-- [e.g.: "Functional components, never class"]
-- [e.g.: "Variables in English, comments in English"]
-- [e.g.: "Absolute imports @/"]
+- [e.g.: "Variables and comments in English"]
+- [e.g.: "Public functions require explicit types/signatures"]
+- [e.g.: "Import paths relative to project root"]
 
 ## Token Optimization
 

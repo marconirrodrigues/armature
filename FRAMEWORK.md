@@ -69,11 +69,11 @@ Default layout for every generated project (§31):
 │   ├── boundaries.md     patterns/
 │   └── agents-roster.md  task-routing.md  (multi-agent only)
 └── <project-name>/                  ← The actual project repo
-    ├── src/ ...
-    ├── package.json (or equivalent)
+    ├── [source dirs]                 (stack-specific layout)
+    ├── [stack manifest]              (dependency file for the chosen stack)
     ├── README.md                    (clean — no AI/framework references)
     ├── .gitignore
-    └── [stack-specific files]
+    └── [stack-specific config]
 ```
 
 **Rules:**
